@@ -108,7 +108,7 @@ dev_dependencies:
 
   firebase_core: ^2.4.0
 
-  flutter_swiper: ^1.1.6
+#  flutter_swiper: ^1.1.6
 
   firebase_messaging: ^14.1.4
 
