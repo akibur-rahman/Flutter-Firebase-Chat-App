@@ -1,7 +1,8 @@
+import 'package:app/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -11,13 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Firebase Chat App",
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Container(
-        color: Colors.green,
-      ),
+      home: LoginPage(),
     );
   }
 }
