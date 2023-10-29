@@ -1,3 +1,4 @@
+import 'package:app/components/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,6 +11,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -21,16 +25,20 @@ class _LoginPageState extends State<LoginPage> {
                 size: 80,
               ),
 
+              //welcome back message
               Text(
                 "Welcome back. You've been missed!",
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
                 ),
-              )
-              //welcome back message
+              ),
 
               //emial textfield
+              MyTextField(
+                  controller: emailController,
+                  hintText: "Email",
+                  obscureText: false),
 
               //password textfield
 
