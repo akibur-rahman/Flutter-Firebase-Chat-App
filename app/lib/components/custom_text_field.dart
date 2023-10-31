@@ -20,7 +20,10 @@ class MyTextField extends StatelessWidget {
           hintText: hintText,
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey.shade200),
-          )),
+          ),
+          fillColor: Colors.grey[400],
+          filled: true,
+          hintStyle: TextStyle(color: Colors.grey)),
     );
   }
 }
