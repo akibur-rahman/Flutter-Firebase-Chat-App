@@ -2,21 +2,22 @@ import 'package:app/components/custom_button.dart';
 import 'package:app/components/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
 
-    void signin() {}
+    void signup() {}
 
     return Scaffold(
       backgroundColor: Colors.grey[300],
@@ -37,9 +38,9 @@ class _LoginPageState extends State<LoginPage> {
                     size: 100,
                   ),
                   SizedBox(height: 50),
-                  //welcome back message
+                  //account creation message
                   Text(
-                    "Welcome back. You've been missed!",
+                    "Let's Create an account for you!",
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey,
@@ -64,20 +65,27 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true),
                   SizedBox(height: 25),
 
+                  //confirm password Textfield
+                  MyTextField(
+                      controller: confirmPasswordController,
+                      hintText: "confirm password",
+                      obscureText: true),
+                  SizedBox(height: 25),
+
                   //login button
-                  MyButton(onTap: signin, text: "Sign In"),
+                  MyButton(onTap: signup, text: "Sign Up"),
 
                   //not a member mesasge
                   SizedBox(height: 50),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Not a member?"),
+                      Text("Already registared?"),
                       SizedBox(width: 4),
                       GestureDetector(
                         onTap: widget.onTap,
                         child: Text(
-                          "Register Now",
+                          "Login Now",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.blue),
                         ),
