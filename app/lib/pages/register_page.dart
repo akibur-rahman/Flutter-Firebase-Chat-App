@@ -63,7 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: passwordController,
                       hintText: "password",
                       obscureText: true),
-                  SizedBox(height: 25),
+                  SizedBox(height: 10),
 
                   //confirm password Textfield
                   MyTextField(
