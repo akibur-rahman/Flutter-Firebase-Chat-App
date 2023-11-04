@@ -1,6 +1,8 @@
 import 'package:app/components/custom_button.dart';
 import 'package:app/components/custom_text_field.dart';
+import 'package:app/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   final void Function()? onTap;
@@ -16,7 +18,17 @@ class _LoginPageState extends State<LoginPage> {
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
 
-    void signin() {}
+    Future<void> signin() async {
+      //auth service
+      final authService = Provider.of<AuthService>(context, listen: false);
+      try {
+        await authService.signIn(emailController.text, passwordController.text);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.toString()),
+        ));
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.grey[300],
