@@ -1,3 +1,4 @@
+import 'package:app/pages/chat_page.dart';
 import 'package:app/services/auth/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  //instense of auth
+  //instance of auth
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   //sign-out
@@ -34,14 +35,12 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: Container(
-        child: _buildUserList(),
-      ),
+      body: _buildUserList(),
     );
   }
 
   //list of all users except logged in user
-  Widget _buildUserList(DocumentSnapshot document) {
+  Widget _buildUserList() {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
@@ -61,13 +60,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildUserItem(DocumentSnapshot document) {
-    Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-    //display all user except cureent
+    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+    //display all users except current user
     if (_auth.currentUser?.email != data['email']) {
       return ListTile(
-        title: data['email'],
-        onTap: () {},
+        title: Text(
+          data['email'],
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChatPage(
+                recieverUserEmail: data['email'],
+                recieverUserID: data['uid'],
+              ),
+            ),
+          );
+        },
       );
+    } else {
+      return Container();
     }
   }
 }
