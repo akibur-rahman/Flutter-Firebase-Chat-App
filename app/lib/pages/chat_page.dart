@@ -1,5 +1,4 @@
-import 'dart:html';
-
+import 'package:app/components/chat_bubble.dart';
 import 'package:app/components/custom_text_field.dart';
 import 'package:app/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -76,18 +75,28 @@ class _ChatPageState extends State<ChatPage> {
 
     //allign the sender mesage to left and reciever message to left
     var alignment = (data['senderId'] == _auth.currentUser!.uid)
-        ? Alignment.centerRight
-        : Alignment.centerLeft;
+        ? Alignment.centerLeft
+        : Alignment.centerRight;
 
     return Container(
       alignment: alignment,
+      padding: EdgeInsets.all(8),
       child: Column(
+        crossAxisAlignment: (data['senderId'] == _auth.currentUser!.uid)
+            ? CrossAxisAlignment.start
+            : CrossAxisAlignment.end,
+        mainAxisAlignment: (data['senderId'] == _auth.currentUser!.uid)
+            ? MainAxisAlignment.start
+            : MainAxisAlignment.end,
         children: [
           Text(
             data['senderEmail'],
           ),
-          Text(
-            data['message'],
+          ChatBubble(
+            message: data['message'],
+            color: (data['senderId'] == _auth.currentUser!.uid)
+                ? Colors.blue.shade400
+                : Colors.grey.shade200,
           ),
         ],
       ),
