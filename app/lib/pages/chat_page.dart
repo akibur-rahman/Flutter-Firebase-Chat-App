@@ -42,6 +42,9 @@ class _ChatPageState extends State<ChatPage> {
               child: _buildMessageList(),
             ),
             _buildMessageInput(),
+            SizedBox(
+              height: 25,
+            ),
           ],
         ));
   }
@@ -92,6 +95,9 @@ class _ChatPageState extends State<ChatPage> {
           Text(
             data['senderEmail'],
           ),
+          SizedBox(
+            height: 5,
+          ),
           ChatBubble(
             message: data['message'],
             color: (data['senderId'] == _auth.currentUser!.uid)
@@ -105,22 +111,25 @@ class _ChatPageState extends State<ChatPage> {
 
   //build message input
   Widget _buildMessageInput() {
-    return Row(
-      children: [
-        Expanded(
-          child: MyTextField(
-              controller: _messagecontroller,
-              hintText: "Enter Message",
-              obscureText: false),
-        ),
-        IconButton(
-          onPressed: sendMesage,
-          icon: Icon(
-            Icons.arrow_upward,
-            size: 40,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      child: Row(
+        children: [
+          Expanded(
+            child: MyTextField(
+                controller: _messagecontroller,
+                hintText: "Enter Message",
+                obscureText: false),
           ),
-        ),
-      ],
+          IconButton(
+            onPressed: sendMesage,
+            icon: Icon(
+              Icons.arrow_upward,
+              size: 40,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
