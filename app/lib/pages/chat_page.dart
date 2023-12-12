@@ -24,8 +24,9 @@ class _ChatPageState extends State<ChatPage> {
 
   String encodeMessage() {
     String message = _messagecontroller.text;
-    String stuffedMessage = StuffMessage(message);
-    String binaryMessage = convertToBinary(stuffedMessage);
+    String stuffedMessage = StuffMessage(_messagecontroller.text);
+    String binaryMessage = stringToBinary(stuffedMessage);
+    //String finalEncodedMessage = evenParity(binaryMessage);
     return binaryMessage;
   }
 
@@ -38,12 +39,35 @@ class _ChatPageState extends State<ChatPage> {
     return stuffedMessage;
   }
 
-  String convertToBinary(String stuffedMessage) {
-    String binaryMessage;
-    //convert the message into binary and store in binary message
-    binaryMessage =
-        stuffedMessage.codeUnits.map((unit) => unit.toRadixString(2)).join();
-    return binaryMessage;
+  String stringToBinary(String s) {
+    int len = s.length;
+    StringBuffer binary = StringBuffer();
+    for (int i = 0; i < len; ++i) {
+      int ch = s.codeUnitAt(i);
+      for (int j = 7; j >= 0; --j) {
+        if ((ch & (1 << j)) != 0) {
+          binary.write("1");
+        } else {
+          binary.write("0");
+        }
+      }
+    }
+    return binary.toString();
+  }
+
+  String evenParity(String binaryMessage) {
+    String evenParityMessage;
+    //count the number of 1's in the binary message
+    int count = binaryMessage.replaceAll('0', '').length;
+    //if the number of 1's is even, append 0 to the begining of the message
+    if (count % 2 == 0) {
+      evenParityMessage = '0' + binaryMessage;
+    }
+    //if the number of 1's is odd, append 1 to the begining of the message
+    else {
+      evenParityMessage = '1' + binaryMessage;
+    }
+    return evenParityMessage;
   }
 
   void sendMesage() async {
@@ -102,6 +126,38 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildMessageItem(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
+    String removeParityBit(String binaryMessage) {
+      // Remove the first bit (parity bit)
+      return binaryMessage.substring(1);
+    }
+
+    String binaryToString(String binary) {
+      int len = binary.length;
+      String result = '';
+      for (int i = 0; i < len; i += 8) {
+        String byte = binary.substring(i, i + 8);
+        int charCode = int.parse(byte, radix: 2);
+        result = result + String.fromCharCode(charCode);
+      }
+      return result;
+    }
+
+    String removeStuffing(String message) {
+      String unstuffedMessage;
+      //remove 'TRXA' from the begining and end of message
+      unstuffedMessage = message.replaceAll('TRXA', '');
+      //remove 'TRXATRXA' from the message
+      unstuffedMessage.replaceAll('TRXATRXA', 'TRXA');
+      return unstuffedMessage;
+    }
+
+    String decodeMessage(String binaryMessage) {
+      //  String withoutParityBit = removeParityBit(binaryMessage);
+      String stringMessage = binaryToString(binaryMessage);
+      String decodedMessage = removeStuffing(stringMessage);
+      return decodedMessage;
+    }
+
     //allign the sender mesage to left and reciever message to left
     var alignment = (data['senderId'] == _auth.currentUser!.uid)
         ? Alignment.centerLeft
@@ -125,7 +181,8 @@ class _ChatPageState extends State<ChatPage> {
             height: 5,
           ),
           ChatBubble(
-            message: data['message'],
+            message: decodeMessage(data['message']),
+            //message: data['message'],
             color: (data['senderId'] == _auth.currentUser!.uid)
                 ? Colors.blue.shade400
                 : Colors.grey.shade200,
