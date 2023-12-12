@@ -31,11 +31,11 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   String StuffMessage(String message) {
-    String stuffedMessage;
+    String stuffedMessage = message;
     //search message for 'TRXA' and add 'TRXATRXA' in its place
-    message.replaceAll('TRXA', 'TRXATRXA');
+    stuffedMessage.replaceAll('TRXA', 'ASGBGFHKYASGBGFHKY');
     //append 'TRXA' in the begining and end of message and store in stuffed message
-    stuffedMessage = 'TRXA' + message + 'TRXA';
+    stuffedMessage = 'TRXA' + stuffedMessage + 'TRXA';
     return stuffedMessage;
   }
 
@@ -126,6 +126,9 @@ class _ChatPageState extends State<ChatPage> {
   //build message item
   Widget _buildMessageItem(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+    String withoutParityBit = '';
+    String stringMessage = '';
+    String decodedMessage = '';
 
     //remove last parity bit
     String removeParityBit(String message) {
@@ -148,15 +151,16 @@ class _ChatPageState extends State<ChatPage> {
       String unstuffedMessage;
       //remove 'TRXA' from the begining and end of message
       unstuffedMessage = message.replaceAll('TRXA', '');
-      //remove 'TRXATRXA' from the message
-      unstuffedMessage.replaceAll('TRXATRXA', 'TRXA');
+      //replace'TRXATRZA' with 'TRXA'
+      unstuffedMessage.replaceAll('ASGBGFHKYASGBGFHKY', 'TRXA');
+
       return unstuffedMessage;
     }
 
     String decodeMessage(String binaryMessage) {
-      String withoutParityBit = removeParityBit(binaryMessage);
-      String stringMessage = binaryToString(withoutParityBit);
-      String decodedMessage = removeStuffing(stringMessage);
+      withoutParityBit = removeParityBit(binaryMessage);
+      stringMessage = binaryToString(withoutParityBit);
+      decodedMessage = removeStuffing(stringMessage);
       return decodedMessage;
     }
 
@@ -188,6 +192,10 @@ class _ChatPageState extends State<ChatPage> {
             color: (data['senderId'] == _auth.currentUser!.uid)
                 ? Colors.blue.shade400
                 : Colors.grey.shade200,
+            encodedMessage: data['message'],
+            messageWithoutParity: withoutParityBit,
+            stuffedMessage: stringMessage,
+            decodedMessage: decodedMessage,
           ),
         ],
       ),

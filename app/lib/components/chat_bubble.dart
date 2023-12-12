@@ -4,7 +4,18 @@ import 'package:flutter/material.dart';
 class ChatBubble extends StatelessWidget {
   final String message;
   final Color color;
-  const ChatBubble({super.key, required this.message, required this.color});
+  final encodedMessage;
+  final messageWithoutParity;
+  final stuffedMessage;
+  final decodedMessage;
+  const ChatBubble(
+      {super.key,
+      required this.message,
+      required this.color,
+      this.encodedMessage,
+      this.messageWithoutParity,
+      this.stuffedMessage,
+      this.decodedMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +38,11 @@ class ChatBubble extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MessageDetails(),
+            builder: (context) => MessageDetails(
+                encodedMessage: encodedMessage,
+                messageWithoutParity: messageWithoutParity,
+                stuffedMessage: stuffedMessage,
+                message: message),
           ),
         );
       },
