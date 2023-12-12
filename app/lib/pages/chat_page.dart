@@ -24,10 +24,10 @@ class _ChatPageState extends State<ChatPage> {
 
   String encodeMessage() {
     String message = _messagecontroller.text;
-    String stuffedMessage = StuffMessage(_messagecontroller.text);
+    String stuffedMessage = StuffMessage(message);
     String binaryMessage = stringToBinary(stuffedMessage);
-    //String finalEncodedMessage = evenParity(binaryMessage);
-    return binaryMessage;
+    String finalEncodedMessage = evenParity(binaryMessage);
+    return finalEncodedMessage;
   }
 
   String StuffMessage(String message) {
@@ -55,19 +55,20 @@ class _ChatPageState extends State<ChatPage> {
     return binary.toString();
   }
 
+  //add a parity bot at the end of the message and make even parity
   String evenParity(String binaryMessage) {
-    String evenParityMessage;
-    //count the number of 1's in the binary message
-    int count = binaryMessage.replaceAll('0', '').length;
-    //if the number of 1's is even, append 0 to the begining of the message
+    int count = 0;
+    for (int i = 0; i < binaryMessage.length; i++) {
+      if (binaryMessage[i] == '1') {
+        count++;
+      }
+    }
     if (count % 2 == 0) {
-      evenParityMessage = '0' + binaryMessage;
+      binaryMessage = binaryMessage + '0';
+    } else {
+      binaryMessage = binaryMessage + '1';
     }
-    //if the number of 1's is odd, append 1 to the begining of the message
-    else {
-      evenParityMessage = '1' + binaryMessage;
-    }
-    return evenParityMessage;
+    return binaryMessage;
   }
 
   void sendMesage() async {
@@ -126,9 +127,10 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildMessageItem(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
-    String removeParityBit(String binaryMessage) {
-      // Remove the first bit (parity bit)
-      return binaryMessage.substring(1);
+    //remove last parity bit
+    String removeParityBit(String message) {
+      String withoutParityBit = message.substring(0, message.length - 1);
+      return withoutParityBit;
     }
 
     String binaryToString(String binary) {
@@ -152,8 +154,8 @@ class _ChatPageState extends State<ChatPage> {
     }
 
     String decodeMessage(String binaryMessage) {
-      //  String withoutParityBit = removeParityBit(binaryMessage);
-      String stringMessage = binaryToString(binaryMessage);
+      String withoutParityBit = removeParityBit(binaryMessage);
+      String stringMessage = binaryToString(withoutParityBit);
       String decodedMessage = removeStuffing(stringMessage);
       return decodedMessage;
     }
