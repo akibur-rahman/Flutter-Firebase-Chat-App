@@ -22,10 +22,36 @@ class _ChatPageState extends State<ChatPage> {
   final ChatService _chatService = ChatService();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  String encodeMessage() {
+    String message = _messagecontroller.text;
+    String stuffedMessage = StuffMessage(message);
+    String binaryMessage = convertToBinary(stuffedMessage);
+    return binaryMessage;
+  }
+
+  String StuffMessage(String message) {
+    String stuffedMessage;
+    //search message for 'TRXA' and add 'TRXATRXA' in its place
+    message.replaceAll('TRXA', 'TRXATRXA');
+    //append 'TRXA' in the begining and end of message and store in stuffed message
+    stuffedMessage = 'TRXA' + message + 'TRXA';
+    return stuffedMessage;
+  }
+
+  String convertToBinary(String stuffedMessage) {
+    String binaryMessage;
+    //convert the message into binary and store in binary message
+    binaryMessage =
+        stuffedMessage.codeUnits.map((unit) => unit.toRadixString(2)).join();
+    return binaryMessage;
+  }
+
   void sendMesage() async {
     if (_messagecontroller.text.isNotEmpty) {
       await _chatService.sendMessage(
-          widget.recieverUserID, _messagecontroller.text);
+        widget.recieverUserID,
+        encodeMessage(),
+      );
       _messagecontroller.clear();
     }
   }
