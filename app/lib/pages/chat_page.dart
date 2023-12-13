@@ -32,9 +32,9 @@ class _ChatPageState extends State<ChatPage> {
 
   String StuffMessage(String message) {
     String stuffedMessage = message;
-    //search message for 'TRXA' and add 'TRXATRXA' in its place
-    stuffedMessage.replaceAll('TRXA', 'ASGBGFHKYASGBGFHKY');
-    //append 'TRXA' in the begining and end of message and store in stuffed message
+    // search message for 'TRXA' and add 'HHHTRXA' in its place
+    stuffedMessage = stuffedMessage.replaceAll('TRXA', 'HHHTRXA');
+    // append 'TRXA' in the beginning and end of message and store in stuffed message
     stuffedMessage = 'TRXA' + stuffedMessage + 'TRXA';
     return stuffedMessage;
   }
@@ -148,11 +148,12 @@ class _ChatPageState extends State<ChatPage> {
     }
 
     String removeStuffing(String message) {
-      String unstuffedMessage;
-      //remove 'TRXA' from the begining and end of message
-      unstuffedMessage = message.replaceAll('TRXA', '');
-      //replace'TRXATRZA' with 'TRXA'
-      unstuffedMessage.replaceAll('ASGBGFHKYASGBGFHKY', 'TRXA');
+      String unstuffedMessage = message;
+      // replace 'HHHTRXA' with 'TRXA'
+      unstuffedMessage = unstuffedMessage.replaceAll('HHHTRXA', 'TRXA');
+      // remove 'TRXA' from the beginning and end of message only if they are standalone
+      unstuffedMessage =
+          unstuffedMessage.substring(4, unstuffedMessage.length - 4);
 
       return unstuffedMessage;
     }

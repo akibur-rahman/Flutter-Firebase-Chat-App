@@ -1,3 +1,4 @@
+import 'package:app/components/check_parity.dart';
 import 'package:flutter/material.dart';
 
 class MessageDetails extends StatefulWidget {
@@ -17,6 +18,8 @@ class MessageDetails extends StatefulWidget {
 }
 
 class _MessageDetailsState extends State<MessageDetails> {
+  get encodedMessage => widget.encodedMessage;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,35 +28,34 @@ class _MessageDetailsState extends State<MessageDetails> {
       ),
       body: Container(
         padding: EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Message: ${widget.message}',
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Text(
-              'Stuffed Message: ${widget.stuffedMessage}',
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Text(
-              'Message without parity: ${widget.messageWithoutParity}',
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Text(
-              'Encoded Message: ${widget.encodedMessage}',
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Message: ${widget.message}',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Text(
+                'Stuffed Message: ${widget.stuffedMessage}',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Text(
+                'Message without parity: ${widget.messageWithoutParity}',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              CheckParity(encodedMessage: encodedMessage),
+            ],
+          ),
         ),
       ),
     );
