@@ -55,20 +55,29 @@ class _ChatPageState extends State<ChatPage> {
     return binary.toString();
   }
 
-  //add a parity bot at the end of the message and make even parity
+  //add parity bit at the end of each byte make even parity
   String evenParity(String binaryMessage) {
+    String finalEncodedMessage = '';
+    String parityBit = '';
+    String byte = '';
     int count = 0;
-    for (int i = 0; i < binaryMessage.length; i++) {
-      if (binaryMessage[i] == '1') {
-        count++;
+    int len = binaryMessage.length;
+    for (int i = 0; i < len; i += 8) {
+      byte = binaryMessage.substring(i, i + 8);
+      for (int j = 0; j < 8; j++) {
+        if (byte[j] == '1') {
+          count++;
+        }
       }
+      if (count % 2 == 0) {
+        parityBit = '0';
+      } else {
+        parityBit = '1';
+      }
+      finalEncodedMessage = finalEncodedMessage + byte + parityBit;
+      count = 0;
     }
-    if (count % 2 == 0) {
-      binaryMessage = binaryMessage + '0';
-    } else {
-      binaryMessage = binaryMessage + '1';
-    }
-    return binaryMessage;
+    return finalEncodedMessage;
   }
 
   void sendMesage() async {
@@ -131,8 +140,13 @@ class _ChatPageState extends State<ChatPage> {
     String decodedMessage = '';
 
     //remove last parity bit
-    String removeParityBit(String message) {
-      String withoutParityBit = message.substring(0, message.length - 1);
+    String removeParityBit(String binaryMessage) {
+      String withoutParityBit = '';
+      int len = binaryMessage.length;
+      for (int i = 0; i < len; i += 9) {
+        String byte = binaryMessage.substring(i, i + 8);
+        withoutParityBit = withoutParityBit + byte;
+      }
       return withoutParityBit;
     }
 
